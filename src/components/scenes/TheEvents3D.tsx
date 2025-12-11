@@ -2772,7 +2772,6 @@ function SpectraScene() {
 
       <CameraController />
 
-      <IntroScene />
       <Portal />
       <EventXScene />
       <VortexTunnel />
@@ -2811,17 +2810,24 @@ export function TheEvents3D() {
 
   if (!mounted) {
     return (
-      <div
-        ref={containerRef}
-        className="relative w-full"
-        style={{ height: "500vh" }}
-      >
-        <div className="sticky top-0 w-full h-screen bg-black flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-            <span className="text-white/60 text-sm font-mono">
-              Loading Experience...
-            </span>
+      <div className="relative w-full bg-black">
+        <div className="h-[50vh] flex items-center justify-center">
+          <h3 className="text-xl md:text-2xl tracking-[0.4em] text-white/40 font-light">
+            THE EVENTS
+          </h3>
+        </div>
+        <div
+          ref={containerRef}
+          className="relative w-full"
+          style={{ height: "500vh" }}
+        >
+          <div className="sticky top-0 w-full h-screen bg-black flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+              <span className="text-white/60 text-sm font-mono">
+                Loading Experience...
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -2829,26 +2835,36 @@ export function TheEvents3D() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full"
-      style={{ height: "500vh" }}
-    >
-      <div className="sticky top-0 w-full h-screen">
-        <Canvas
-          camera={{ position: [0, 0, 0], fov: 50, near: 0.1, far: 10000 }}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: "high-performance",
-          }}
-          style={{ background: "#000000" }}
-          dpr={[1, 2]}
-        >
-          <Suspense fallback={<Loader />}>
-            <SpectraScene />
-          </Suspense>
-        </Canvas>
+    <div className="relative w-full bg-black">
+      {/* THE EVENTS header - like the original */}
+      <div className="h-[50vh] flex items-center justify-center">
+        <h3 className="text-xl md:text-2xl tracking-[0.4em] text-white/40 font-light animate-fade-in">
+          THE EVENTS
+        </h3>
+      </div>
+
+      {/* 3D Experience */}
+      <div
+        ref={containerRef}
+        className="relative w-full"
+        style={{ height: "500vh" }}
+      >
+        <div className="sticky top-0 w-full h-screen">
+          <Canvas
+            camera={{ position: [0, 0, 0], fov: 50, near: 0.1, far: 10000 }}
+            gl={{
+              antialias: true,
+              alpha: true,
+              powerPreference: "high-performance",
+            }}
+            style={{ background: "#000000" }}
+            dpr={[1, 2]}
+          >
+            <Suspense fallback={<Loader />}>
+              <SpectraScene />
+            </Suspense>
+          </Canvas>
+        </div>
       </div>
     </div>
   );
