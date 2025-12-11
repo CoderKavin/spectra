@@ -153,6 +153,71 @@ function Loader() {
 }
 
 // ============================================================================
+// SCROLL PAUSE ZONES - Dead zones where scrolling pauses to let users read titles
+// ============================================================================
+// Each event has a "pause zone" after the title appears
+// Format: { start: z position where pause begins, duration: how long the pause lasts in scroll units }
+const PAUSE_ZONES = [
+  { center: 750, pauseAmount: 0.015 }, // Event X
+  { center: 1750, pauseAmount: 0.015 }, // Battle of the Bands
+  { center: 2750, pauseAmount: 0.015 }, // Spotlight
+  { center: 3750, pauseAmount: 0.015 }, // Mural
+  { center: 4750, pauseAmount: 0.015 }, // Unveil
+  { center: 5750, pauseAmount: 0.015 }, // Beat the Street
+  { center: 6750, pauseAmount: 0.015 }, // Parody
+];
+
+// Map raw scroll progress to adjusted progress with pause zones
+function applyScrollPauses(rawProgress: number): number {
+  // Total pause amount affects how we map scroll to camera position
+  const totalPauseAmount = PAUSE_ZONES.reduce(
+    (sum, zone) => sum + zone.pauseAmount,
+    0,
+  );
+  const effectiveScrollRange = 1 + totalPauseAmount;
+
+  // Scale raw progress to account for pause zones
+  let adjustedProgress = rawProgress * effectiveScrollRange;
+
+  // For each pause zone, check if we're in it and apply the pause
+  let accumulatedPause = 0;
+
+  for (const zone of PAUSE_ZONES) {
+    const zoneProgressCenter = zone.center / 7000;
+    const pauseStart = zoneProgressCenter - 0.01;
+    const pauseEnd = zoneProgressCenter + zone.pauseAmount + 0.01;
+
+    if (
+      adjustedProgress - accumulatedPause >= pauseStart &&
+      adjustedProgress - accumulatedPause <= pauseEnd
+    ) {
+      // We're in the pause zone - clamp to the center
+      const distFromStart = adjustedProgress - accumulatedPause - pauseStart;
+      const zoneWidth = pauseEnd - pauseStart;
+
+      if (distFromStart < zoneWidth * 0.3) {
+        // Entering pause - slow approach
+        return pauseStart + distFromStart * 0.3;
+      } else if (distFromStart > zoneWidth * 0.7) {
+        // Exiting pause - speed up
+        const exitProgress =
+          (distFromStart - zoneWidth * 0.7) / (zoneWidth * 0.3);
+        return zoneProgressCenter + exitProgress * 0.01;
+      } else {
+        // In the middle of pause - stay at center
+        return zoneProgressCenter;
+      }
+    }
+
+    if (adjustedProgress - accumulatedPause > pauseEnd) {
+      accumulatedPause += zone.pauseAmount;
+    }
+  }
+
+  return Math.min(1, adjustedProgress - accumulatedPause);
+}
+
+// ============================================================================
 // CAMERA CONTROLLER - Ultra-smooth scroll-driven camera
 // ============================================================================
 function CameraController() {
@@ -177,7 +242,13 @@ function CameraController() {
 
       const scrollableDistance = containerHeight - viewportHeight;
       const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      const rawProgress = Math.max(
+        0,
+        Math.min(1, scrolled / scrollableDistance),
+      );
+
+      // Apply pause zones to create reading time for titles
+      const progress = applyScrollPauses(rawProgress);
 
       // Calculate velocity for motion blur effects
       const deltaTime = (now - lastScrollTime) / 1000;
@@ -1499,7 +1570,8 @@ function MuralScene() {
     const cameraZ = camera.position.z;
     const sceneZ = 3750;
 
-    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 450);
+    // Larger fade range to bridge gap to Unveil scene
+    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 600);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1529,8 +1601,8 @@ function MuralScene() {
         count={300}
         color={COLORS.pink}
         size={2}
-        zStart={3500}
-        zEnd={4000}
+        zStart={3200}
+        zEnd={4300}
         spread={500}
         speed={1.5}
         baseOpacity={0.5}
@@ -1570,7 +1642,8 @@ function MuralLetter({
     const offset = Math.sin(state.clock.elapsedTime * 2 + index) * 5;
     meshRef.current.position.y = position[1] + offset;
 
-    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 450);
+    // Larger fade range for Mural scene
+    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 600);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1628,7 +1701,8 @@ function PaintSplatters({ sceneZ }: { sceneZ: number }) {
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 450);
+    // Larger fade range for Mural scene
+    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 600);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1681,7 +1755,8 @@ function UnveilScene() {
     const cameraZ = camera.position.z;
     const sceneZ = 4750;
 
-    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 500);
+    // Larger fade range to bridge gap to Beat the Street
+    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 650);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1886,7 +1961,8 @@ function UnveilDiamonds() {
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 
-    const targetOpacity = getSceneOpacity(camera.position.z, 4750, 450);
+    // Larger fade range for Unveil scene
+    const targetOpacity = getSceneOpacity(camera.position.z, 4750, 650);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1944,7 +2020,8 @@ function BeatTheStreetScene() {
     const cameraZ = camera.position.z;
     const sceneZ = 5750;
 
-    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 450);
+    // Larger fade range to bridge gap from Unveil
+    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 650);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -2053,7 +2130,8 @@ function GraffitiElements({ sceneZ }: { sceneZ: number }) {
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 450);
+    // Larger fade range for Beat the Street
+    const targetOpacity = getSceneOpacity(camera.position.z, sceneZ, 650);
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
