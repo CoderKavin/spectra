@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+:root {
+  --spectra-black: #000000;
+  --spectra-dark: #0a0a0a;
+  --spectra-purple: #8B5CF6;
+  --spectra-violet: #7C3AED;
+  --spectra-blue: #3B82F6;
+  --spectra-cyan: #06B6D4;
+  --spectra-pink: #EC4899;
+  --spectra-orange: #F97316;
+  --spectra-gold: #F59E0B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  background: #000000;
+}
+
+body {
+  background: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Hide scrollbar for a cleaner cinematic experience */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(139, 92, 246, 0.4);
+  color: #ffffff;
+}
+
+/* Smooth text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Scene container base */
+.scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Cinematic text styles */
+.cinematic-text {
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.cinematic-text-bold {
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Glow effects */
+.glow-purple {
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.5),
+               0 0 80px rgba(139, 92, 246, 0.3),
+               0 0 120px rgba(139, 92, 246, 0.2);
+}
+
+.glow-white {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5),
+               0 0 80px rgba(255, 255, 255, 0.3);
+}
+
+/* Logo glow */
+.logo-glow {
+  filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6))
+          drop-shadow(0 0 80px rgba(139, 92, 246, 0.4))
+          drop-shadow(0 0 120px rgba(139, 92, 246, 0.2));
+}
+
+/* Particle canvas overlay */
+.particles-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure content is above particles */
+.content-layer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Custom cursor styles */
+.custom-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out;
+}
+
+.custom-cursor.hovering {
+  width: 40px;
+  height: 40px;
+  background: rgba(139, 92, 246, 0.5);
+  mix-blend-mode: normal;
+}
+
+/* Fade mask for transitions */
+.fade-mask {
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+/* Spotlight effect */
+.spotlight {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
+}
+
+/* Vignette overlay */
+.vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 100;
+}
+
+/* Film grain overlay */
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+.film-grain {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
+}
