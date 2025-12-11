@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { TheArrival } from "@/components/scenes/TheArrival";
@@ -25,79 +25,7 @@ import { TheLegacy } from "@/components/scenes/TheLegacy";
 import { TheGallery } from "@/components/scenes/TheGallery";
 import { TheInvitation } from "@/components/scenes/TheInvitation";
 
-function LoadingScreen({ onComplete }: { onComplete: () => void }) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const duration = 2000;
-    const interval = 20;
-    const increment = 100 / (duration / interval);
-
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + increment;
-        if (next >= 100) {
-          clearInterval(timer);
-          setTimeout(onComplete, 500);
-          return 100;
-        }
-        return next;
-      });
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, [onComplete]);
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1, ease: "easeInOut" }}
-    >
-      <div className="text-center">
-        <motion.img
-          src="/SPECTRA_LOGO.png"
-          alt="SPECTRA"
-          className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-8 object-contain"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            filter: [
-              "drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))",
-              "drop-shadow(0 0 40px rgba(139, 92, 246, 0.5))",
-              "drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))",
-            ],
-          }}
-          transition={{
-            duration: 0.8,
-            filter: { duration: 2, repeat: Infinity },
-          }}
-        />
-
-        <div className="w-48 h-px bg-white/10 mx-auto overflow-hidden">
-          <motion.div
-            className="h-full bg-gradient-to-r from-purple-500 to-cyan-500"
-            style={{ width: `${progress}%` }}
-            transition={{ ease: "linear" }}
-          />
-        </div>
-
-        <motion.p
-          className="mt-6 text-xs tracking-[0.4em] text-white/40"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          ENTERING EXPERIENCE
-        </motion.p>
-      </div>
-    </motion.div>
-  );
-}
-
 export function CinematicExperience() {
-  const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
   useSmoothScroll();
@@ -105,10 +33,6 @@ export function CinematicExperience() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  const handleLoadingComplete = () => {
-    setIsLoading(false);
-  };
 
   if (!isMounted) {
     return <div className="min-h-screen bg-black" />;
@@ -121,17 +45,12 @@ export function CinematicExperience() {
         <CustomCursor />
       </div>
 
-      {/* Loading screen */}
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-      </AnimatePresence>
-
       {/* Main experience */}
       <motion.main
         className="relative bg-black"
         initial={{ opacity: 0 }}
-        animate={{ opacity: isLoading ? 0 : 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
       >
         {/* Film grain overlay */}
         <div className="film-grain" />
