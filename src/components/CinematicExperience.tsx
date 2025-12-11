@@ -75,25 +75,6 @@ export function CinematicExperience() {
 
         {/* ACT 6: The Invitation */}
         <TheInvitation />
-
-        {/* Final black screen */}
-        <div className="h-screen bg-black flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 2 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <motion.img
-              src="/SPECTRA_LOGO.png"
-              alt="SPECTRA"
-              className="w-16 h-16 mx-auto opacity-30"
-              animate={{ opacity: [0.2, 0.4, 0.2] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </div>
       </motion.main>
     </>
   );

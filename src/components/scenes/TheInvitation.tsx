@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 
 export function TheInvitation() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,13 +21,11 @@ export function TheInvitation() {
   const dateOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
   const dateY = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
   const contactOpacity = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
-  const logoOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
-  const logoScale = useTransform(scrollYProgress, [0.7, 0.9, 1], [0.8, 1, 1]);
   const logoGlow = useTransform(scrollYProgress, [0.8, 1], [0.3, 1]);
   const fadeToBlack = useTransform(scrollYProgress, [0.9, 1], [0, 0.7]);
 
   return (
-    <div ref={containerRef} className="relative bg-black h-[350vh]">
+    <div ref={containerRef} className="relative bg-black h-[200vh]">
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
         <motion.div
           className="absolute inset-0 flex items-center justify-center"
@@ -72,7 +69,7 @@ export function TheInvitation() {
           </motion.h2>
 
           <motion.div
-            className="mb-12"
+            className="mb-16"
             style={{ opacity: subtitleOpacity, y: subtitleY }}
           >
             <span
@@ -89,16 +86,16 @@ export function TheInvitation() {
           </motion.div>
 
           <motion.div
-            className="mb-12"
+            className="mb-16"
             style={{ opacity: dateOpacity, y: dateY }}
           >
             <p className="text-lg sm:text-xl md:text-2xl tracking-[0.2em] text-white/60 font-light">
-              COMING SOON
+              Aug 1, 2026
             </p>
           </motion.div>
 
           <motion.div
-            className="w-32 h-px mx-auto mb-10"
+            className="w-32 h-px mx-auto mb-12"
             style={{
               opacity: contactOpacity,
               background:
@@ -107,14 +104,11 @@ export function TheInvitation() {
           />
 
           <motion.div className="mb-10" style={{ opacity: contactOpacity }}>
-            <p className="text-xs md:text-sm tracking-[0.4em] text-white/30 font-light mb-2">
+            <p className="text-xs md:text-sm tracking-[0.4em] text-white/30 font-light mb-4">
               HOSTED BY
             </p>
             <p className="text-base md:text-lg tracking-[0.2em] text-white/60 font-light">
               TRIVANDRUM INTERNATIONAL SCHOOL
-            </p>
-            <p className="text-xs md:text-sm tracking-[0.3em] text-white/40 font-light mt-1">
-              TRINS
             </p>
           </motion.div>
 
@@ -122,9 +116,6 @@ export function TheInvitation() {
             className="flex flex-col items-center gap-3"
             style={{ opacity: contactOpacity }}
           >
-            <span className="text-sm md:text-base tracking-[0.3em] text-white/50">
-              Aug 1, 2026
-            </span>
             <a
               href="mailto:spectra@trins.org"
               className="text-sm md:text-base tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors duration-300"
@@ -132,30 +123,6 @@ export function TheInvitation() {
             >
               spectra@trins.org
             </a>
-          </motion.div>
-
-          <motion.div
-            className="mt-16"
-            style={{ opacity: logoOpacity, scale: logoScale }}
-          >
-            <motion.div
-              animate={{
-                filter: [
-                  "drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))",
-                  "drop-shadow(0 0 60px rgba(139, 92, 246, 0.6))",
-                  "drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))",
-                ],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Image
-                src="/SPECTRA_LOGO.png"
-                alt="SPECTRA"
-                width={120}
-                height={120}
-                className="w-20 h-20 md:w-24 md:h-24 object-contain mx-auto opacity-80"
-              />
-            </motion.div>
           </motion.div>
         </div>
 
