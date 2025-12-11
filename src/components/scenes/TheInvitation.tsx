@@ -122,15 +122,11 @@ export function TheInvitation() {
             className="flex flex-col items-center gap-3"
             style={{ opacity: contactOpacity }}
           >
+            <span className="text-sm md:text-base tracking-[0.3em] text-white/50">
+              Aug 1, 2026
+            </span>
             <a
-              href="#"
-              className="text-sm md:text-base tracking-[0.3em] text-white/50 hover:text-white/80 transition-colors duration-300"
-              data-hoverable="true"
-            >
-              @SPECTRA.TRINS
-            </a>
-            <a
-              href="#"
+              href="mailto:spectra@trins.org"
               className="text-sm md:text-base tracking-[0.2em] text-white/40 hover:text-white/70 transition-colors duration-300"
               data-hoverable="true"
             >
