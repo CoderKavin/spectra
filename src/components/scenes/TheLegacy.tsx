@@ -11,8 +11,7 @@ const years = [
   { year: "2023", highlight: false },
   { year: "2024", highlight: false },
   { year: "2025", highlight: false },
-  { year: "2026", highlight: false },
-  { year: "2027", highlight: true },
+  { year: "2026", highlight: true },
 ];
 
 export function TheLegacy() {
@@ -61,7 +60,7 @@ export function TheLegacy() {
             THE JOURNEY
           </h2>
           <p className="mt-4 text-sm tracking-[0.3em] text-white/40 font-light">
-            EIGHT YEARS IN THE MAKING
+            AUGUST 1, 2026
           </p>
         </motion.div>
 

@@ -84,7 +84,7 @@ export function TheInvitation() {
                 backgroundClip: "text",
               }}
             >
-              SPECTRA 8 | 2027
+              SPECTRA 8 | 2026
             </span>
           </motion.div>
 

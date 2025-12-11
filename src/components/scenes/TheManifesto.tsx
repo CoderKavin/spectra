@@ -121,7 +121,7 @@ export function TheManifesto() {
               className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extralight tracking-[0.15em] text-white"
               style={{ textShadow: "0 0 80px rgba(255,255,255,0.3)" }}
             >
-              EIGHT YEARS.
+              AUGUST 1, 2026
             </h2>
           </motion.div>
 

@@ -143,7 +143,7 @@ export function TheArrival() {
               }}
             >
               <span className="text-xl sm:text-2xl md:text-3xl tracking-[0.3em] text-white/70 font-light">
-                2027
+                2026
               </span>
             </motion.div>
           </motion.div>

@@ -2,12 +2,12 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SPECTRA 8 | 2027 - TRINS",
+  title: "SPECTRA 8 | 2026 - TRINS",
   description:
     "Eight Years. Eight Events. One Unforgettable Experience. Hosted by Trivandrum International School.",
   keywords: [
     "SPECTRA",
-    "2027",
+    "2026",
     "TRINS",
     "Trivandrum International School",
     "cultural festival",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "SPECTRA TRINS" }],
   openGraph: {
-    title: "SPECTRA 8 | 2027 - TRINS",
+    title: "SPECTRA 8 | 2026 - TRINS",
     description:
       "Eight Years. Eight Events. One Unforgettable Experience. Hosted by Trivandrum International School.",
     type: "website",

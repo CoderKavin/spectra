@@ -1636,7 +1636,7 @@ function FinaleScene() {
           anchorY="middle"
           position={[0, -50, 0]}
         >
-          2027
+          2026
         </Text>
 
         <Text
@@ -1815,7 +1815,7 @@ function ScrollIndicator() {
     beatTheStreet: "BEAT THE STREET",
     glitch: "TRANSITION",
     parody: "PARODY",
-    finale: "SPECTRA 2027",
+    finale: "SPECTRA 2026",
   };
 
   return (
