@@ -504,6 +504,80 @@ function ParticleSystem({
 }
 
 // ============================================================================
+// INTRO SCENE - "THE EVENTS" title before portal
+// ============================================================================
+function IntroScene() {
+  const groupRef = useRef<THREE.Group>(null);
+  const { camera } = useThree();
+  const currentOpacity = useRef(1);
+
+  useFrame((state, delta) => {
+    if (!groupRef.current) return;
+
+    const cameraZ = camera.position.z;
+
+    // Visible at start, fades out as we approach portal
+    let targetOpacity = 0;
+    if (cameraZ < 300) {
+      targetOpacity = 1 - easeOutQuart(cameraZ / 300);
+    }
+
+    currentOpacity.current = smoothDamp(
+      currentOpacity.current,
+      targetOpacity,
+      0.1,
+      delta,
+    );
+
+    groupRef.current.visible = currentOpacity.current > 0.01;
+
+    // Update text opacity
+    groupRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        const material = child.material as THREE.MeshBasicMaterial;
+        if (material.opacity !== undefined) {
+          material.opacity =
+            currentOpacity.current * (material.userData.baseOpacity || 1);
+        }
+      }
+    });
+  });
+
+  return (
+    <group ref={groupRef} position={[0, 0, 100]}>
+      {/* Main title */}
+      <Text
+        fontSize={25}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.4}
+        position={[0, 0, 0]}
+      >
+        THE EVENTS
+        <meshBasicMaterial
+          transparent
+          opacity={0.4}
+          userData={{ baseOpacity: 0.4 }}
+        />
+      </Text>
+
+      {/* Subtle glow behind */}
+      <mesh position={[0, 0, -10]}>
+        <planeGeometry args={[300, 80]} />
+        <meshBasicMaterial
+          color={COLORS.purple}
+          transparent
+          opacity={0.05}
+          blending={THREE.AdditiveBlending}
+          userData={{ baseOpacity: 0.05 }}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// ============================================================================
 // PORTAL COMPONENT - Smooth entry transition
 // ============================================================================
 function Portal() {
@@ -1755,8 +1829,20 @@ function UnveilScene() {
     const cameraZ = camera.position.z;
     const sceneZ = 4750;
 
-    // Larger fade range to bridge gap to Beat the Street
-    const targetOpacity = getSceneOpacity(cameraZ, sceneZ, 650);
+    // Custom opacity with hold period - stays at full opacity for a range
+    // Fade in: 4100-4500, Hold: 4500-5100, Fade out: 5100-5400
+    let targetOpacity = 0;
+    if (cameraZ >= 4100 && cameraZ < 4500) {
+      // Fade in
+      targetOpacity = easeOutQuart((cameraZ - 4100) / 400);
+    } else if (cameraZ >= 4500 && cameraZ <= 5100) {
+      // Hold at full opacity - this gives time to read
+      targetOpacity = 1;
+    } else if (cameraZ > 5100 && cameraZ <= 5500) {
+      // Fade out
+      targetOpacity = 1 - easeOutQuart((cameraZ - 5100) / 400);
+    }
+
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -1961,8 +2047,18 @@ function UnveilDiamonds() {
   useFrame((state, delta) => {
     if (!groupRef.current) return;
 
-    // Larger fade range for Unveil scene
-    const targetOpacity = getSceneOpacity(camera.position.z, 4750, 650);
+    const cameraZ = camera.position.z;
+
+    // Match UnveilScene opacity timing with hold period
+    let targetOpacity = 0;
+    if (cameraZ >= 4100 && cameraZ < 4500) {
+      targetOpacity = easeOutQuart((cameraZ - 4100) / 400);
+    } else if (cameraZ >= 4500 && cameraZ <= 5100) {
+      targetOpacity = 1;
+    } else if (cameraZ > 5100 && cameraZ <= 5500) {
+      targetOpacity = 1 - easeOutQuart((cameraZ - 5100) / 400);
+    }
+
     currentOpacity.current = smoothDamp(
       currentOpacity.current,
       targetOpacity,
@@ -2676,6 +2772,7 @@ function SpectraScene() {
 
       <CameraController />
 
+      <IntroScene />
       <Portal />
       <EventXScene />
       <VortexTunnel />
